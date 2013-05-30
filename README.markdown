@@ -53,25 +53,25 @@ The following archives are supported:
 
 #### Common Parameters
 
-[*target*]
+*target*
   The target directory to decompress the archive file too.
   This parameter is required
 
-[*url*]
+*url*
   The URL where the file can be downloaded from.
   This parameter is required. Do no specify the file name in the URL.
 
-[*strip*]
+*strip*
   Strip root directory from archive file   
   Defaults to 'false'
 
-[*version*]
+*version*
    Define an arbitrary version number for the tar file. Must be an integer.
    WARNING: Incrementing this version number removes target directory and 
    and redeploys tar file. Both version and package must be defined.
    Defaults to undefined
 
-[*package*]
+*package*
    define an arbitrary package name for the tar file. 
    creates a static fact [package]\_version in /etc/facter/facts.d/ with
    file name [package].yaml. Both version and package must be defined.

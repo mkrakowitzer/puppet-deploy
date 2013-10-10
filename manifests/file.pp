@@ -116,8 +116,8 @@ define deploy::file (
     $val1 = inline_template("<% @${package}_version = 0 if @${package}_version.nil? %><% return @${package}_version %>")
     if $version > $val1 {
       exec { "rm_${target}":
-        command   => "rm -rf ${target}",
-        onlyif    => "test -d ${target}",
+        command   => "/bin/rm -rf ${target}",
+        onlyif    => "/usr/bin/test -d ${target}",
         before    => Exec["download_${file}"],
       }
     }
@@ -127,7 +127,7 @@ define deploy::file (
   exec { "download_${file}":
     command => "$fetch $fetch_options ${deploy::tempdir}/${file} ${url}/${file}",
     creates => "$deploy::tempdir/${file}",
-    unless  => "test -d $target",
+    unless  => "/usr/bin/test -d $target",
     notify  => File[$target],
     require => File[$deploy::tempdir]
   }
@@ -147,8 +147,8 @@ define deploy::file (
 
   # Remove the downloaded files after they have been uncompressed.
   exec { "cleanup_${file}":
-    command   => "rm -f ${deploy::tempdir}/${file}",
-    onlyif    => "test -f ${deploy::tempdir}/${file}",
+    command   => "/bin/rm -f ${deploy::tempdir}/${file}",
+    onlyif    => "/usr/bin/test -f ${deploy::tempdir}/${file}",
     require   => Exec["untarball_${file}"],
     subscribe => Exec["untarball_${file}"];
   }

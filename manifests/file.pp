@@ -24,21 +24,21 @@
 #   The path to the wget command.
 #   Defaults to '/usr/bin/wget'
 #
-#[*fetch_options*]
+# [*fetch_options*]
 #   Overwrite the default wget options. You probably don't want to do this.
 #   Defaults to '-q -c --no-check-certificate -O'
 #
-#[*strip*]
+# [*strip*]
 #   Strip root directory from archive file
 #   Defaults to 'false'
 #
-#[*version*]
+# [*version*]
 #   Define an arbitrary version number for the tar file. Must be an integer.
 #   WARNING: Incrementing this version number removes target directory and
 #   and redeploys tar file. Both version and package must be defined.
 #   Defaults to undefined
 #
-#[*package*]
+# [*package*]
 #   define an arbitrary package name for the tar file.
 #   creates a static fact [package]_version in /etc/facter/facts.d/ with
 #   file name [package].yaml. Both version and package must be defined.
@@ -80,7 +80,7 @@ define deploy::file (
   $command_options = undef,
   $fetch           = '/usr/bin/wget',
   $fetch_options   = '-q -c --no-check-certificate -O',
-  $strip           = 'false',
+  $strip           = false,
   $version         = undef,
   $package         = undef,
 ) {
@@ -111,7 +111,7 @@ define deploy::file (
   if $version != undef and $package != undef {
     file { "/etc/facter/facts.d/${package}.yaml":
       ensure  => file,
-      content => "${package}_version: $version\n",
+      content => "${package}_version: ${version}\n",
     }
     $val1 = inline_template("<% @${package}_version = 0 if @${package}_version.nil? %><% return @${package}_version %>")
     if $version > $val1 {
@@ -125,9 +125,9 @@ define deploy::file (
 
   # Download the compressed file to deploy directory
   exec { "download_${file}":
-    command => "$fetch $fetch_options ${deploy::tempdir}/${file} ${url}/${file}",
-    creates => "$deploy::tempdir/${file}",
-    unless  => "test -d $target",
+    command => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
+    creates => "${deploy::tempdir}/${file}",
+    unless  => "test -d ${target}",
     notify  => File[$target],
     require => File[$deploy::tempdir]
   }
@@ -139,7 +139,7 @@ define deploy::file (
 
   # Uncompress downloaded file
   exec { "untarball_${file}":
-    command     => "$command $dl_cmd_options $deploy::tempdir/${file} -C $target $strip_options",
+    command     => "${command} ${dl_cmd_options} ${deploy::tempdir}/${file} -C ${target} ${strip_options} --no-same-owner",
     subscribe   => File[$target],
     refreshonly => true,
     require     => [ File[$target], Exec["download_${file}"] ];

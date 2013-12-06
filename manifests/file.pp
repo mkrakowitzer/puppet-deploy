@@ -84,6 +84,9 @@ define deploy::file (
   $version         = undef,
   $package         = undef,
 ) {
+  Exec {
+    path => '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin',
+  }
 
   $file = $title
 

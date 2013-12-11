@@ -13,10 +13,12 @@ The following archives are supported:
 
 ###Setup Requirements
 
-* No requirements
-	
+* Your site.pp should contain your default paths.
+```puppet
+    Exec { path => "/usr/bin:/usr/sbin/:/bin:/sbin" }
+```
 ##Usage
-
+```puppet
     # Set the default temp directory to use
     class { 'deploy':
       tempdir => '/opt/deploy'
@@ -43,7 +45,7 @@ The following archives are supported:
       version => '1',
       package => 'maven'
     }
-
+```
 ###Classes:
 * `deploy` - set the default working directory.
 

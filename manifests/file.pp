@@ -28,6 +28,12 @@
 #   Overwrite the default wget options. You probably don't want to do this.
 #   Defaults to '-q -c --no-check-certificate -O'
 #
+# [*owner*]
+#   Define which user will owner deployed files. You need to declare this user. 
+#
+# [*group*]
+#   Define which group will owner deployed files. You need to declare this group.
+#
 # [*strip*]
 #   Strip root directory from archive file
 #   Defaults to 'false'
@@ -83,9 +89,14 @@ define deploy::file (
   $strip           = false,
   $version         = undef,
   $package         = undef,
+  $owner           = undef,
+  $group           = undef,
 ) {
 
   $file = $title
+
+  if $owner != undef { $_owner = "--owner $_owner" }
+  if $group != undef { $_group = "--group $_group" }
 
   # Strip root directory from archive file
   if $strip == true {
@@ -139,7 +150,7 @@ define deploy::file (
 
   # Uncompress downloaded file
   exec { "untarball_${file}":
-    command     => "${command} ${dl_cmd_options} ${deploy::tempdir}/${file} -C ${target} ${strip_options} --no-same-owner",
+    command     => "${command} ${dl_cmd_options} ${deploy::tempdir}/${file} -C ${target} ${strip_options} --no-same-owner ${_owner} ${_group}",
     subscribe   => File[$target],
     refreshonly => true,
     require     => [ File[$target], Exec["download_${file}"] ];

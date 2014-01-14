@@ -64,6 +64,15 @@ The following archives are supported:
   * The URL where the file can be downloaded from.
   * This parameter is required. Do no specify the file name in the URL.
 
+*owner*
+
+  * Define which user will owner deployed files. You need to declare this user.
+
+*group*
+
+  * Define which group will owner deployed files. You need to declare this group.
+  * Defaults to undefined
+
 *strip*
  
   * Strip root directory from archive file   

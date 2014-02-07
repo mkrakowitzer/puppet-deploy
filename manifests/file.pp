@@ -29,7 +29,7 @@
 #   Defaults to '-q -c --no-check-certificate -O'
 #
 # [*owner*]
-#   Define which user will owner deployed files. You need to declare this user. 
+#   Define which user will owner deployed files. You need to declare this user.
 #
 # [*group*]
 #   Define which group will owner deployed files. You need to declare this group.
@@ -95,8 +95,8 @@ define deploy::file (
 
   $file = $title
 
-  if $owner != undef { $_owner = "--owner $owner" }
-  if $group != undef { $_group = "--group $group" }
+  if $owner != undef { $_owner = "--owner ${owner}" }
+  if $group != undef { $_group = "--group ${group}" }
 
   # Strip root directory from archive file
   if $strip == true {

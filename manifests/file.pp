@@ -38,6 +38,10 @@
 #   Strip root directory from archive file
 #   Defaults to 'false'
 #
+# [*strip_level*]
+#   Levels to strip from root directory from archive file
+#   Defaults to '1'
+#
 # [*version*]
 #   Define an arbitrary version number for the tar file. Must be an integer.
 #   WARNING: Incrementing this version number removes target directory and
@@ -87,6 +91,7 @@ define deploy::file (
   $fetch           = '/usr/bin/wget',
   $fetch_options   = '-q -c --no-check-certificate -O',
   $strip           = false,
+  $strip_level     = 1,
   $version         = undef,
   $package         = undef,
   $owner           = undef,
@@ -100,7 +105,7 @@ define deploy::file (
 
   # Strip root directory from archive file
   if $strip == true {
-    $strip_options = '--strip 1'
+    $strip_options = "--strip ${strip_level}"
   } else {
     $strip_options = ''
   }

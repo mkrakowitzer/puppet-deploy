@@ -78,6 +78,11 @@ The following archives are supported:
   * Strip root directory from archive file   
   * Defaults to 'false'
 
+*strip_level*
+
+  * Levels to strip from root directory from archive file
+  * Defaults to '1'
+
 *version*
    
    * Define an arbitrary version number for the tar file. Must be an integer.

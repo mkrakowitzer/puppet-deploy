@@ -95,8 +95,8 @@ define deploy::file (
 
   $file = $title
 
-  if $owner != undef { $_owner = "--owner $_owner" }
-  if $group != undef { $_group = "--group $_group" }
+  if $owner != undef { $_owner = "--owner $owner" }
+  if $group != undef { $_group = "--group $group" }
 
   # Strip root directory from archive file
   if $strip == true {

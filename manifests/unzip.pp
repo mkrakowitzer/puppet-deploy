@@ -15,9 +15,12 @@
 # [*command_options*]
 #   Overwrite the default command options. You probably don't want to do this.
 #   Defaults to undef
-# [*strip*]
-#   Strip root directory from archive file
-#   Defaults to 'false'
+#
+# [*owner*]
+#   Define which user will owner deployed files. You need to declare this user.
+#
+# [*group*]
+#   Define which group will owner deployed files. You need to declare this group.
 # === Authors
 #
 # Merritt Krakowitzer
@@ -30,10 +33,10 @@
 #
 define deploy::unzip (
   $target,
-  $command         = '/usr/bin/unzip',
-  $command_options = undef,
-  $owner           = undef,
-  $group           = undef
+  $command,
+  $command_options,
+  $owner,
+  $group
 ) {
 
   $file = $title

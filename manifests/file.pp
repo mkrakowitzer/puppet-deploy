@@ -86,7 +86,7 @@
 define deploy::file (
   $target,
   $url,
-  $command         = '/bin/tar',
+  $command         = undef,
   $command_options = undef,
   $fetch           = '/usr/bin/wget',
   $fetch_options   = '-q -c --no-check-certificate -O',
@@ -125,9 +125,13 @@ define deploy::file (
   }
 
   if $file =~ /(\.tar[\.gb2x]*)|(.tgz)$/ {
+    $_command = $command ? {
+        undef   => '/bin/tar',
+        default => $command
+    }
     untar { "${deploy::tempdir}/${file}" :
       target          => $target,
-      command         => $command,
+      command         => $_command,
       command_options => $command_options,
       strip           => $strip,
       strip_level     => $strip_level,
@@ -137,9 +141,13 @@ define deploy::file (
       notify          => Exec["cleanup_${file}"]
     }
   } elsif $file =~ /.zip$/ {
+    $_command = $command ? {
+        undef   => '/usr/bin/unzip',
+        default => $command
+    }
     unzip { "${deploy::tempdir}/${file}" :
       target          => $target,
-      command         => $command,
+      command         => $_command,
       command_options => $command_options,
       owner           => $owner,
       group           => $group,

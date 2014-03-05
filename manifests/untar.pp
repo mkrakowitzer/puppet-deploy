@@ -10,14 +10,28 @@
 #
 # [*command*]
 #   The path to the tar command.
-#   Defaults to '/bin/tar'
+#   This parameter is required
 #
 # [*command_options*]
 #   Overwrite the default command options. You probably don't want to do this.
-#   Defaults to undef
+#   This parameter is required
+
 # [*strip*]
 #   Strip root directory from archive file
-#   Defaults to 'false'
+#   This parameter is required
+#
+# [*strip_level*]
+#   Levels to strip from root directory from archive file
+#   This parameter is required
+#
+# [*owner*]
+#   Define which user will owner deployed files. You need to declare this user.
+#   This parameter is required
+#
+# [*group*]
+#   Define which group will owner deployed files. You need to declare this group.
+#   This parameter is required
+#
 # === Authors
 #
 # Merritt Krakowitzer

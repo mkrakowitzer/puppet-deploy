@@ -14,7 +14,7 @@
 #
 # [*command*]
 #   The path to the tar command.
-#   Defaults to '/bin/tar'
+#   Defaults to 'undef
 #
 # [*command_options*]
 #   Overwrite the default command options. You probably don't want to do this.

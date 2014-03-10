@@ -14,7 +14,7 @@
 #
 # [*command*]
 #   The path to the tar command.
-#   Defaults to '/bin/tar'
+#   Defaults to 'undef
 #
 # [*command_options*]
 #   Overwrite the default command options. You probably don't want to do this.
@@ -86,7 +86,7 @@
 define deploy::file (
   $target,
   $url,
-  $command         = '/bin/tar',
+  $command         = undef,
   $command_options = undef,
   $fetch           = '/usr/bin/wget',
   $fetch_options   = '-q -c --no-check-certificate -O',
@@ -99,29 +99,6 @@ define deploy::file (
 ) {
 
   $file = $title
-
-  if $owner != undef { $_owner = "--owner ${owner}" }
-  if $group != undef { $_group = "--group ${group}" }
-
-  # Strip root directory from archive file
-  if $strip == true {
-    $strip_options = "--strip ${strip_level}"
-  } else {
-    $strip_options = ''
-  }
-
-  # Set default uncompress flags for archives we know.
-  if $command_options == undef {
-    if $file =~ /.tar.gz$|.tgz$/ {
-      $dl_cmd_options = 'xzf'
-    } elsif $file =~ /.tar.bz2$/ {
-      $dl_cmd_options = 'xjf'
-    } elsif $file =~ /.tar.xz$/ {
-      $dl_cmd_options = 'xJf'
-    } else {
-      fail('Dont know type')
-    }
-  }
 
   # Very experimental right now. Attemt to do some kind of version management.
   if $version != undef and $package != undef {
@@ -144,29 +121,48 @@ define deploy::file (
     command => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
     creates => "${deploy::tempdir}/${file}",
     unless  => "test -d ${target}",
-    notify  => File[$target],
     require => File[$deploy::tempdir]
   }
 
-  file { $target:
-    ensure  => directory,
-    require => Exec["download_${file}"],
-  }
-
-  # Uncompress downloaded file
-  exec { "untarball_${file}":
-    command     => "${command} ${dl_cmd_options} ${deploy::tempdir}/${file} -C ${target} ${strip_options} --no-same-owner ${_owner} ${_group}",
-    subscribe   => File[$target],
-    refreshonly => true,
-    require     => [ File[$target], Exec["download_${file}"] ];
+  if $file =~ /(\.tar[\.gb2x]*)|(.tgz)$/ {
+    $_command = $command ? {
+        undef   => '/bin/tar',
+        default => $command
+    }
+    untar { "${deploy::tempdir}/${file}" :
+      target          => $target,
+      command         => $_command,
+      command_options => $command_options,
+      strip           => $strip,
+      strip_level     => $strip_level,
+      owner           => $owner,
+      group           => $group,
+      require         => Exec["download_${file}"],
+      notify          => Exec["cleanup_${file}"]
+    }
+  } elsif $file =~ /.zip$/ {
+    $_command = $command ? {
+        undef   => '/usr/bin/unzip',
+        default => $command
+    }
+    unzip { "${deploy::tempdir}/${file}" :
+      target          => $target,
+      command         => $_command,
+      command_options => $command_options,
+      owner           => $owner,
+      group           => $group,
+      require         => Exec["download_${file}"],
+      notify          => Exec["cleanup_${file}"]
+    }
+  } else {
+    fail('Unsupported file type')
   }
 
   # Remove the downloaded files after they have been uncompressed.
   exec { "cleanup_${file}":
-    command   => "rm -f ${deploy::tempdir}/${file}",
-    onlyif    => "test -f ${deploy::tempdir}/${file}",
-    require   => Exec["untarball_${file}"],
-    subscribe => Exec["untarball_${file}"];
+    command     => "rm -f ${deploy::tempdir}/${file}",
+    onlyif      => "test -f ${deploy::tempdir}/${file}",
+    refreshonly => true,
   }
 
 }

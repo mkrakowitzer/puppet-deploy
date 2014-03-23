@@ -1,5 +1,5 @@
 name    'mkrakowitzer-deploy'
-version '0.0.1'
+version '0.0.2'
 source 'https://github.com/mkrakowitzer/puppet-deploy.git'
 author 'mkrakowitzer'
 license 'Apache License, Version 2.0'

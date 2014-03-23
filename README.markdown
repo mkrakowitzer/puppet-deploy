@@ -1,5 +1,6 @@
 #puppet-deploy
-
+[![Build
+Status](https://travis-ci.org/mkrakowitzer/puppet-deploy.svg)](https://travis-ci.org/mkrakowitzer/puppet-deploy)
 ##Overview
 
 This module downloads and extracts compressed files to a specific directory.

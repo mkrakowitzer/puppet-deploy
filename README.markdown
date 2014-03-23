@@ -1,5 +1,6 @@
 #puppet-deploy
-
+[![Build
+Status](https://travis-ci.org/mkrakowitzer/puppet-deploy.svg)](https://travis-ci.org/mkrakowitzer/puppet-deploy)
 ##Overview
 
 This module downloads and extracts compressed files to a specific directory.
@@ -13,10 +14,6 @@ The following archives are supported:
 
 ###Setup Requirements
 
-* Your site.pp should contain your default paths.
-```puppet
-    Exec { path => "/usr/bin:/usr/sbin/:/bin:/sbin" }
-```
 ##Usage
 ```puppet
     # Set the default temp directory to use
@@ -116,5 +113,7 @@ pieces if it breaks. I certainly don't recommend managing packages this way.**
 * Distributed under the terms of the Apache License, Version 2.0.
 * Please submit a pull request or issue on [GitHub](https://github.com/mkrakowitzer/puppet-deploy)
 
-### 0.0.1
-* First Release
+## Contributors
+* Jonathan Johnson
+* Andreyev Dias de Melo
+

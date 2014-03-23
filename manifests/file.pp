@@ -99,8 +99,8 @@ define deploy::file (
   $download_timout = 300,
 ) {
 
-  Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
-  
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+
   $file = $title
 
   # Very experimental right now. Attemt to do some kind of version management.
@@ -124,7 +124,7 @@ define deploy::file (
     command         => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
     creates         => "${deploy::tempdir}/${file}",
     unless          => "test -d ${target}",
-    timeout          => $download_timout,
+    timeout         => $download_timout,
     require         => File[$deploy::tempdir]
   }
 

@@ -4,9 +4,7 @@ rvm:
   - 1.9.3
 script: "rake spec"
 env:
-  - PUPPET_VERSION=2.7.25
   - PUPPET_VERSION=3.4.2
-  - PUPPET_VERSION=3.5.0
 notifications:
   email:
     - merritt@krakowitzer.com

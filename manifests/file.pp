@@ -103,7 +103,7 @@ define deploy::file (
 
   if ! defined(Class['deploy']) {
     class { 'deploy':
-      tempdir => '/var/tmp/deploy',
+      tempdir => '/var/deploy',
     }
   }
 

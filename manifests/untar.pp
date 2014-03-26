@@ -55,9 +55,6 @@ define deploy::untar (
 
   $file = $title
 
-  if $owner != undef { $_owner = "${owner}" } else { $_owner = 'root' }
-  if $group != undef { $_group = "${group}" } else { $_group = 'root' }
-
   # Strip root directory from archive file
   if $strip == true {
     $strip_options = "--strip ${strip_level}"
@@ -79,16 +76,19 @@ define deploy::untar (
       fail('Dont know type')
     }
   }
-
   file { $target:
-    ensure  => directory
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
   }
   # Uncompress downloaded file
-  $_cmd = "${command} ${dl_cmd_options} ${file} -C ${target} ${strip_options} --no-same-owner --to-command='${chown} ${_ownea{r:a{$_groua}p \$TAR_FILENAME'"
+  $_cmd = "${command} ${dl_cmd_options} ${file} -C ${target} ${strip_options} --no-same-owner"
   exec { "untarball_${file}":
     command     => $_cmd,
     subscribe   => File[$target],
     refreshonly => true,
+    user        => $owner,
+    group       => $group,
     require     => [ File[$target] ];
   }
 }

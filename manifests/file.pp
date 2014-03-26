@@ -94,12 +94,18 @@ define deploy::file (
   $strip_level     = 1,
   $version         = undef,
   $package         = undef,
-  $owner           = undef,
-  $group           = undef,
+  $owner           = 'root',
+  $group           = 'root',
   $download_timout = 300,
 ) {
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+
+  if ! defined(Class['deploy']) {
+    class { 'deploy':
+      tempdir => '/var/tmp/deploy',
+    }
+  }
 
   $file = $title
 
@@ -125,7 +131,7 @@ define deploy::file (
     creates         => "${deploy::tempdir}/${file}",
     unless          => "test -d ${target}",
     timeout         => $download_timout,
-    require         => File[$deploy::tempdir]
+    require         => [ Class['deploy'], File[$deploy::tempdir], ],
   }
 
   if $file =~ /(\.tar[\.gb2x]*)|(.tgz)$/ {

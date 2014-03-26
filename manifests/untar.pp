@@ -50,7 +50,6 @@ define deploy::untar (
   $strip_level,
   $owner,
   $group,
-  $chown = 'chown',
 ) {
 
   $file = $title

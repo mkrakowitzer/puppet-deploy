@@ -27,7 +27,7 @@
 # Published under the Apache License, Version 2.0
 #
 class deploy(
-  $tempdir = '/var/tmp/deploy'
+  $tempdir = '/tmp/deploy'
 ) {
 
   file { $tempdir:

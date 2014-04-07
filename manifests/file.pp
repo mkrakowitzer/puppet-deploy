@@ -132,7 +132,7 @@ define deploy::file (
     creates         => "${deploy::tempdir}/${file}",
     unless          => "test -d ${target}",
     timeout         => $download_timout,
-    environment     => $environment
+    environment     => $environment,
     require         => [ Class['deploy'], File[$deploy::tempdir], ],
   }
 

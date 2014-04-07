@@ -97,6 +97,7 @@ define deploy::file (
   $owner           = 'root',
   $group           = 'root',
   $download_timout = 300,
+  $environment     = undef,
 ) {
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
@@ -131,6 +132,7 @@ define deploy::file (
     creates         => "${deploy::tempdir}/${file}",
     unless          => "test -d ${target}",
     timeout         => $download_timout,
+    environment     => $environment
     require         => [ Class['deploy'], File[$deploy::tempdir], ],
   }
 

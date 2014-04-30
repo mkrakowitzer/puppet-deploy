@@ -45,7 +45,7 @@
 define deploy::untar (
   $target,
   $command,
-  $command_options,
+  $command_options = undef,
   $strip,
   $strip_level,
   $owner,

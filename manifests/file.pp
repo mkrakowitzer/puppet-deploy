@@ -20,6 +20,14 @@
 #   Overwrite the default command options. You probably don't want to do this.
 #   Defaults to undef
 #
+# [*onlyif*]
+#   If this parameter is set, then this resource will only run if the command
+#   returns 0.
+#
+# [*unless*]
+#   If this parameter is set, then this resource will run unless the command
+#   returns 0.
+#
 # [*fetch*]
 #   The path to the wget command.
 #   Defaults to '/usr/bin/wget'
@@ -88,6 +96,8 @@ define deploy::file (
   $url,
   $command         = undef,
   $command_options = undef,
+  $onlyif          = undef,
+  $unless          = undef,
   $fetch           = '/usr/bin/wget',
   $fetch_options   = '-q -c --no-check-certificate -O',
   $strip           = false,
@@ -130,7 +140,8 @@ define deploy::file (
   exec { "download_${file}":
     command         => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
     creates         => "${deploy::tempdir}/${file}",
-    unless          => "test -d ${target}",
+    onlyif          => $onlyif,
+    unless          => $unless,
     timeout         => $download_timout,
     environment     => $env,
     require         => [ Class['deploy'], File[$deploy::tempdir], ],
@@ -145,6 +156,8 @@ define deploy::file (
       target          => $target,
       command         => $_command,
       command_options => $command_options,
+      onlyif          => $onlyif,
+      unless          => $unless,
       strip           => $strip,
       strip_level     => $strip_level,
       owner           => $owner,
@@ -161,6 +174,8 @@ define deploy::file (
       target          => $target,
       command         => $_command,
       command_options => $command_options,
+      onlyif          => $onlyif,
+      unless          => $unless,
       owner           => $owner,
       group           => $group,
       require         => Exec["download_${file}"],

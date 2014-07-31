@@ -16,6 +16,14 @@
 #   Overwrite the default command options. You probably don't want to do this.
 #   This parameter is required
 #
+# [*onlyif*]
+#   If this parameter is set, then this resource will only run if the command
+#   returns 0.
+#
+# [*unless*]
+#   If this parameter is set, then this resource will run unless the command
+#   returns 0.
+
 # [*owner*]
 #   Define which user will owner deployed files. You need to declare this user.
 #   This parameter is required
@@ -37,8 +45,10 @@ define deploy::unzip (
   $target,
   $command,
   $command_options,
+  $onlyif = undef,
+  $unless = undef,
   $owner,
-  $group
+  $group,
 ) {
 
   $file = $title
@@ -51,6 +61,7 @@ define deploy::unzip (
       require     => [ Exec["untarball_${file}"] ];
     }
   }
+
   if $group != undef {
     exec { "deployunzip_chgrp_${target}":
       command     => "/bin/chgrp ${group} -R ${target}",
@@ -58,16 +69,18 @@ define deploy::unzip (
       refreshonly => true,
       require     => [ Exec["untarball_${file}"] ];
     }
-
   }
 
   file { $target:
     ensure  => directory
   }
+
   # Uncompress downloaded file
   $_cmd = "${command} ${command_options} ${file} -d ${target} "
   exec { "deployunzip_${file}":
     command     => $_cmd,
+    onlyif      => $onlyif,
+    unless      => $unless,
     subscribe   => File[$target],
     refreshonly => true,
     require     => [ File[$target] ];

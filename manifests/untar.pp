@@ -15,7 +15,15 @@
 # [*command_options*]
 #   Overwrite the default command options. You probably don't want to do this.
 #   This parameter is required
-
+#
+# [*onlyif*]
+#   If this parameter is set, then this resource will only run if the command
+#   returns 0.
+#
+# [*unless*]
+#   If this parameter is set, then this resource will run unless the command
+#   returns 0.
+#
 # [*strip*]
 #   Strip root directory from archive file
 #   This parameter is required
@@ -46,6 +54,8 @@ define deploy::untar (
   $target,
   $command,
   $command_options = undef,
+  $onlyif = undef,
+  $unless = undef,
   $strip,
   $strip_level,
   $owner,
@@ -75,15 +85,19 @@ define deploy::untar (
       fail('Dont know type')
     }
   }
+
   file { $target:
     ensure => directory,
     owner  => $owner,
     group  => $group,
   }
+
   # Uncompress downloaded file
   $_cmd = "${command} ${dl_cmd_options} ${file} -C ${target} ${strip_options} --no-same-owner"
   exec { "untarball_${file}":
     command     => $_cmd,
+    onlyif      => $onlyif,
+    unless      => $unless,
     subscribe   => File[$target],
     refreshonly => true,
     user        => $owner,

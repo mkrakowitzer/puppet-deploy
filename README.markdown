@@ -27,7 +27,7 @@ The following archives are supported:
       url     => 'http://mywebsite.co.za/development-tools/java',
       strip   => true,
     }
-  
+
     # Deploy another tar file
     deploy::file { 'jdk-8-ea-bin-b90-linux-x64-16_may_2013.tar.gz':
       target  => '/opt/development-tools/java/jdk1.8.0_b90',
@@ -52,12 +52,12 @@ The following archives are supported:
 #### Common Parameters
 
 *target*
-  
+
   * The target directory to decompress the archive file too.
   * This parameter is required
 
 *url*
-  
+
   * The URL where the file can be downloaded from.
   * This parameter is required. Do no specify the file name in the URL.
 
@@ -71,8 +71,8 @@ The following archives are supported:
   * Defaults to undefined
 
 *strip*
- 
-  * Strip root directory from archive file   
+
+  * Strip root directory from archive file
   * Defaults to 'false'
 
 *strip_level*
@@ -81,20 +81,30 @@ The following archives are supported:
   * Defaults to '1'
 
 *version*
-   
+
    * Define an arbitrary version number for the tar file. Must be an integer.
-   * **WARNING**: Incrementing this version number removes target directory and 
+   * **WARNING**: Incrementing this version number removes target directory and
    and redeploys tar file. Both version and package must be defined.
    * Defaults to undefined
 
 *package*
-   
-   * define an arbitrary package name for the tar file. 
+
+   * define an arbitrary package name for the tar file.
    * creates a static fact [package]\_version in /etc/facter/facts.d/ with
    file name [package].yaml. Both version and package must be defined.
    * Defaults to undefined
    * requires facter 1.7.x
    * requires the /etc/facter/facts.d/ directory structure to be in place.
+
+*onlyif*
+
+   * If this parameter is set, then this resource will only run if the command
+   returns 0.
+
+*unless*
+
+   * If this parameter is set, then this resource will run unless the command
+   returns 0.
 
 **If you decide to use the version and package parameters you get to keep both
 pieces if it breaks. I certainly don't recommend managing packages this way.**
@@ -116,4 +126,4 @@ pieces if it breaks. I certainly don't recommend managing packages this way.**
 ## Contributors
 * Jonathan Johnson
 * Andreyev Dias de Melo
-
+* Hamid Nazari

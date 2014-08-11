@@ -126,14 +126,40 @@ define deploy::file (
     }
   }
 
-  # Download the compressed file to deploy directory
-  exec { "download_${file}":
-    command         => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
-    creates         => "${deploy::tempdir}/${file}",
-    unless          => "test -d ${target}",
-    timeout         => $download_timout,
-    environment     => $env,
-    require         => [ Class['deploy'], File[$deploy::tempdir], ],
+  case $url {
+    /^file:\/\//   : {
+      notice("path   => ${deploy::tempdir}/${file}")
+      notice("source => ${url}/${file}")
+
+      file { "download_${file}":
+        path    => "${deploy::tempdir}/${file}",
+        source  => "${url}/${file}",
+        mode    => "0644",
+        require => [Class['deploy'], File[$deploy::tempdir],],
+      }
+      $require_dependency = File["download_${file}"]
+    }
+    /^puppet:\/\// : {
+      file { "download_${file}":
+        path    => "${deploy::tempdir}/${file}",
+        ensure  => 'file',
+        source  => "${url}/${file}",
+        require => [Class['deploy'], File[$deploy::tempdir],],
+      }
+      $require_dependency = File["download_${file}"]
+    }
+    /^https?:\/\// : {
+      # Download the compressed file to deploy directory
+      exec { "download_${file}":
+        command => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
+        creates => "${deploy::tempdir}/${file}",
+        unless  => "test -d ${target}",
+        timeout => $download_timout,
+        environment     => $env,
+        require => [Class['deploy'], File[$deploy::tempdir],],
+      }
+      $require_dependency = Exec["download_${file}"]
+    }
   }
 
   if $file =~ /(\.tar[\.gb2x]*)|(.tgz)$/ {

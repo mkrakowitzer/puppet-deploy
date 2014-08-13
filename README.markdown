@@ -60,6 +60,7 @@ The following archives are supported:
   
   * The URL where the file can be downloaded from.
   * This parameter is required. Do no specify the file name in the URL.
+  * For testing purpose, the module can handle URLs in from `file:///...` and `puppet:///...` style. You must not specify the file name with this URLs either. 
 
 *owner*
 

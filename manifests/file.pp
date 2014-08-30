@@ -89,7 +89,7 @@ define deploy::file (
   $command         = undef,
   $command_options = undef,
   $fetch           = '/usr/bin/wget',
-  $fetch_options   = '-q -c --no-check-certificate -O',
+  $fetch_options   = '-q -c',
   $strip           = false,
   $strip_level     = 1,
   $version         = undef,
@@ -119,9 +119,9 @@ define deploy::file (
     $val1 = inline_template("<% @${package}_version = 0 if @${package}_version.nil? %><% return @${package}_version %>")
     if $version > $val1 {
       exec { "rm_${target}":
-        command   => "rm -rf ${target}",
-        onlyif    => "test -d ${target}",
-        before    => Exec["download_${file}"],
+        command => "rm -rf ${target}",
+        onlyif  => "test -d ${target}",
+        before  => Exec["download_${file}"],
       }
     }
   }
@@ -134,15 +134,15 @@ define deploy::file (
       file { "download_${file}":
         path    => "${deploy::tempdir}/${file}",
         source  => "${url}/${file}",
-        mode    => "0644",
+        mode    => '0644',
         require => [Class['deploy'], File[$deploy::tempdir],],
       }
       $require_dependency = File["download_${file}"]
     }
     /^puppet:\/\// : {
       file { "download_${file}":
-        path    => "${deploy::tempdir}/${file}",
         ensure  => 'file',
+        path    => "${deploy::tempdir}/${file}",
         source  => "${url}/${file}",
         require => [Class['deploy'], File[$deploy::tempdir],],
       }
@@ -151,14 +151,17 @@ define deploy::file (
     /^https?:\/\// : {
       # Download the compressed file to deploy directory
       exec { "download_${file}":
-        command => "${fetch} ${fetch_options} ${deploy::tempdir}/${file} ${url}/${file}",
-        creates => "${deploy::tempdir}/${file}",
-        unless  => "test -d ${target}",
-        timeout => $download_timout,
-        environment     => $env,
-        require => [Class['deploy'], File[$deploy::tempdir],],
+        command     => "${fetch} ${fetch_options} -O ${deploy::tempdir}/${file} ${url}/${file}",
+        creates     => "${deploy::tempdir}/${file}",
+        unless      => "test -d ${target}",
+        timeout     => $download_timout,
+        environment => $env,
+        require     => [Class['deploy'], File[$deploy::tempdir],],
       }
       $require_dependency = Exec["download_${file}"]
+    }
+    default: {
+      fail('URL must match http:// puppet:// or file://')
     }
   }
 

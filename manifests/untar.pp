@@ -45,11 +45,11 @@
 define deploy::untar (
   $target,
   $command,
-  $command_options = undef,
   $strip,
   $strip_level,
   $owner,
   $group,
+  $command_options = undef,
 ) {
 
   $file = $title

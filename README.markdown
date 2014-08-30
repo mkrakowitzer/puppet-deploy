@@ -108,6 +108,24 @@ pieces if it breaks. I certainly don't recommend managing packages this way.**
 * Ubuntu (12.04 LTS tested)
 * Red Hat family (RHEL 5 and 6 tested)
 
+##Testing
+Using [puppetlabs_spec_helper](https://github.com/puppetlabs/puppetlabs_spec_helper). Simply run:
+
+```
+bundle install && bundle exec rake spec
+```
+
+to get results.
+
+```
+/usr/bin/ruby1.9.1 -S rspec spec/defines/deploy_files_spec.rb --color
+ldapname is deprecated and will be removed in a future version
+.
+
+Finished in 0.16558 seconds
+1 example, 0 failures
+```
+
 ##Development
 
 * Copyright (C) 2013 Merritt Krakowitzer - <merritt@krakowitzer.com>

@@ -1,12 +1,14 @@
 require 'rake'
-require 'rspec/core/rake_task'
-require 'rubygems'
 require 'puppetlabs_spec_helper/rake_tasks'
-require 'puppet-lint/tasks/puppet-lint'
+require 'rspec/core/rake_task'
+require 'puppet_blacksmith/rake_tasks'
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = 'spec/*/*_spec.rb'
+begin
+  if Gem::Specification::find_by_name('puppet-lint')
+    require 'puppet-lint/tasks/puppet-lint'
+    PuppetLint.configuration.send('disable_80chars')
+    PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
+    task :default => [:rspec, :lint]
+  end
+rescue Gem::LoadError
 end
-
-PuppetLint.configuration.send('disable_80chars')
-task :default => [:spec, :lint]

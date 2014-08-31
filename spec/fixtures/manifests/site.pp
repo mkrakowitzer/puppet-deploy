@@ -1,3 +1,5 @@
-class { 'deploy':
-  tempdir => '/var/tmp/deploy'
+node default {
+  class { 'deploy':
+    tempdir => '/var/tmp/deploy'
+  }
 }

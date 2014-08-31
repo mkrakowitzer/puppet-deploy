@@ -1,0 +1,31 @@
+{
+  "name": "mkrakowitzer-deploy",
+  "version": "0.0.3",
+  "source": "https://github.com/mkrakowitzer/puppet-deploy.git",
+  "author": "mkrakowitzer",
+  "license": "Apache License, Version 2.0",
+  "summary": "Puppet module to deploy tar files",
+  "description": "Puppet module to deploy tar files",
+  "project_page": "https://github.com/mkrakowitzer/puppet-deploy",
+  "dependencies": [
+
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Gemfile": "165665744c39d4b69dfa48dd145bfcec",
+    "Modulefile": "98fa19e3d10735e223c35dd77ede67e4",
+    "README": "bbe6855e238ecb28885cafff497b4c5f",
+    "README.markdown": "f8ca28ae1b653d35b0cf0074b32572a7",
+    "Rakefile": "a8a477e42cf1e4f97be253af4d624c44",
+    "manifests/file.pp": "a6499d0e1bfb7d49746dad512d208eba",
+    "manifests/init.pp": "d608b0695f0f28fe4885701e71d4b646",
+    "manifests/untar.pp": "edae1de3ba90e61f3ae700916ba8fc4d",
+    "manifests/unzip.pp": "84de6e943dfab0b90a7bcbe2ade1c060",
+    "spec/defines/deploy_files_spec.rb": "b7c68d299b7d01d40595996b72030c7f",
+    "spec/fixtures/manifests/site.pp": "3a0be90cf17db1ea90ade8a9380a1c08",
+    "spec/spec_helper.rb": "792eeb7aa7edafb93e2bc1d27c5e75c5",
+    "tests/init.pp": "50cddb8fafe515df10014b3d5cb05997"
+  }
+}

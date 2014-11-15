@@ -26,7 +26,7 @@
 #
 # [*fetch_options*]
 #   Overwrite the default wget options. You probably don't want to do this.
-#   Defaults to '-q -c --no-check-certificate -O'
+#   Defaults to '-q -c -O'
 #
 # [*owner*]
 #   Define which user will owner deployed files. You need to declare this user.

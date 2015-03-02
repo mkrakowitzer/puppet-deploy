@@ -178,7 +178,7 @@ define deploy::file (
       strip_level     => $strip_level,
       owner           => $owner,
       group           => $group,
-      require         => Exec["download_${file}"],
+      require         => $require_dependency,
       notify          => Exec["cleanup_${file}"]
     }
   } elsif $file =~ /.zip$/ {
@@ -192,7 +192,7 @@ define deploy::file (
       command_options => $command_options,
       owner           => $owner,
       group           => $group,
-      require         => Exec["download_${file}"],
+      require         => $require_dependency,
       notify          => Exec["cleanup_${file}"]
     }
   } else {

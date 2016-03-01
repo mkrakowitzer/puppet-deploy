@@ -170,7 +170,7 @@ define deploy::file (
         undef   => '/bin/tar',
         default => $command
     }
-    untar { "${deploy::tempdir}/${file}" :
+    deploy::untar { "${deploy::tempdir}/${file}" :
       target          => $target,
       command         => $_command,
       command_options => $command_options,

@@ -99,6 +99,9 @@ define deploy::file (
   $download_timout = 300,
   $env             = undef,
 ) {
+  Exec {
+    path => '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin',
+  }
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
